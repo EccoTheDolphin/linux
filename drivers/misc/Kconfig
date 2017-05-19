@@ -460,6 +460,13 @@ config LATTICE_ECP3_CONFIG
 
 	  If unsure, say N.
 
+config STARTERKIT_AT91SAM9MG45_XC6SLX_CONFIG
+	tristate "FPGA driver for SK-AT91SAM9MG45-XC6SLX board"
+	depends on SPI
+	default n
+	help
+	  This option ebables support for Xilinx Spartan6 xc6slx16 for
+	  SK-AT91SAM9MG45-XC6SLX board.
 config SRAM
 	bool "Generic on-chip SRAM driver"
 	depends on HAS_IOMEM

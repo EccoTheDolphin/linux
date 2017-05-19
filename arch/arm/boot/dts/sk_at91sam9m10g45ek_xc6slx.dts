@@ -149,6 +149,27 @@
 							 AT91_PIOD 31 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;	/* PD31 periph B */
 					};
 				};
+				fpga0 {
+					pinctrl_pck0_as_fpga_clock: fpga-clk {
+						atmel,pins =
+							<AT91_PIOE 0  AT91_PERIPH_B AT91_PINCTRL_NONE>;
+					};
+					pinctrl_pc28_as_fpga_irq: fpga-irq {
+						atmel,pins =
+							<AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
+					};
+					pinctrl_pc12_as_fpga_reset: fpga-reset {
+						atmel,pins =
+							<AT91_PIOC 12 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
+					};
+					pinctrl_fpga_prog: fpga-prog {
+						atmel,pins =
+							<AT91_PIOC 10 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+							 AT91_PIOC 11 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+							 AT91_PIOC 29 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+							 AT91_PIOC 30 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
+					};
+				};
 			};
 
 			spi0: spi@fffa4000{
@@ -276,6 +297,28 @@
 
 		usb1: ehci@00800000 {
 			status = "okay";
+		};
+
+		fpga0: fpga@10000000 {
+			status = "okay";
+			compatible = "sk,at91-xc6slx";
+			clocks = <&pck0>;
+			clock-names = "mclk";
+			fpga-cs-memory-window-size = <0x10000000>;
+			fpga-cs0-memory-start-address = <0x10000000>;
+			fpga-cs1-memory-start-address = <0x20000000>;
+			pinctrl-names = "default";
+			pinctrl-0 = <
+				&pinctrl_pck0_as_fpga_clock
+				&pinctrl_pc28_as_fpga_irq
+				&pinctrl_fpga_prog
+				&pinctrl_pc12_as_fpga_reset>;
+			fpga-reset-gpio   = <&pioC 12 GPIO_ACTIVE_HIGH>;
+			fpga-irq-gpio     = <&pioC 28 GPIO_ACTIVE_HIGH>;
+			fpga-program-done = <&pioC 29 GPIO_ACTIVE_HIGH>;
+			fpga-program-cclk = <&pioC 10 GPIO_ACTIVE_HIGH>;
+			fpga-program-din  = <&pioC 11 GPIO_ACTIVE_HIGH>;
+			fpga-program-prog = <&pioC 30 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
